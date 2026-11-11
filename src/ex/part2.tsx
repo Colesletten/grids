@@ -396,8 +396,8 @@ export function Rulers() {
       foot={
         <div className="dial-foot">
           <div className="seg b" role="group">
-            <button className={!hang ? 'on' : ''} onClick={() => !done && setHang(false)}>Type sits on the rule below</button>
-            <button className={hang ? 'on' : ''} onClick={() => !done && setHang(true)}>Type hangs from the rule above</button>
+            <button className={!hang ? 'on' : ''} onClick={() => !done && setHang(false)}>Type sits on the rule</button>
+            <button className={hang ? 'on' : ''} onClick={() => !done && setHang(true)}>Type hangs from the rule</button>
           </div>
           <Why text="Each tap changes a rule between 2 point and ½ point.">
             <Btn onClick={check}>Check</Btn>
@@ -666,9 +666,9 @@ export function Layouts() {
       hint="Sift first, then place. Leave the page room to breathe."
       extras={<span className="gutterline" />}
       pieces={[
-        { id: 'icon', w: 3, h: 3, label: 'Picture 1', node: <span className="px icon"><i /></span> },
-        { id: 'a', w: 1, h: 1, label: 'Picture 2', node: <span className="px weak" /> },
-        { id: 'b', w: 1, h: 1, label: 'Picture 3', node: <span className="px weak two" /> },
+        { id: 'icon', w: 3, h: 3, label: 'Image 1', node: <span className="px icon"><i /></span> },
+        { id: 'a', w: 1, h: 1, label: 'Image 2', node: <span className="px weak" /> },
+        { id: 'b', w: 1, h: 1, label: 'Image 3', node: <span className="px weak two" /> },
         { id: 'head', w: 2, h: 1, label: 'Headline', node: <span className="lay-head">Light</span> },
         { id: 't1', w: 1, h: 2, label: 'Text', node: <span className="tx" /> },
         { id: 't2', w: 1, h: 2, label: 'Text', node: <span className="tx" /> },

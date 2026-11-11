@@ -43,7 +43,7 @@ export function Choose({ rounds }: { rounds: Round[] }) {
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={i}
-          className={`opts ${isText ? 'text' : ''}`}
+          className={`opts ${isText ? 'text' : ''} ${!isText && !round.cols && round.options.length === 3 ? 'n3' : ''}`}
           style={{ '--n': cols } as CSSProperties}
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}

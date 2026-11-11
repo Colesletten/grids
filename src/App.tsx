@@ -19,9 +19,9 @@ import { EXERCISES } from './ex';
 type Route = { name: 'contents' | 'plate' | 'canon'; id?: string; key: string; depth: number };
 
 function parse(hash: string): Route {
-  const [, a, b] = hash.replace(/^#/, '').split('/');
-  if (a === 'p' && b && byId(b)) return { name: 'plate', id: b, key: `p/${b}`, depth: indexOf(b) + 1 };
-  if (a === 'canon') return { name: 'canon', key: 'canon', depth: 99 };
+  const a = hash.replace(/^#\/?/, '');
+  if (byId(a)) return { name: 'plate', id: a, key: a, depth: indexOf(a) + 1 };
+  if (a === 'record') return { name: 'canon', key: 'record', depth: 99 };
   return { name: 'contents', key: 'contents', depth: 0 };
 }
 const subscribeHash = (f: () => void) => {
@@ -138,12 +138,12 @@ function Contents() {
   const review = () => {
     const q = pickReview(PLATES.map((p) => p.id));
     setQueue(q);
-    go(`/p/${q[0]}`);
+    go(`${q[0]}`);
   };
   const resume = () => {
     setQueue([]);
     const next = PLATES.find((p) => (scores[p.id]?.best ?? 0) < MASTERY) ?? PLATES[0];
-    go(`/p/${next.id}`);
+    go(`${next.id}`);
   };
 
   const part = (n: 1 | 2, name: string) => (
@@ -166,7 +166,7 @@ function Contents() {
                 className="row b"
                 onClick={() => {
                   setQueue([]);
-                  go(`/p/${p.id}`);
+                  go(`${p.id}`);
                 }}
               >
                 <span className="row-n">{num(i)}</span>
@@ -210,7 +210,7 @@ function Contents() {
             <button className="link b" onClick={review}>
               Review five
             </button>
-            <button className="link b" onClick={() => go('/canon')}>
+            <button className="link b" onClick={() => go('record')}>
               Your Canon
             </button>
             <GridBtn />
@@ -236,6 +236,8 @@ function Plate({ id }: { id: string }) {
   const p = byId(id)!;
   const i = indexOf(id);
   const wide = useMedia('(min-width: 900px) and (min-aspect-ratio: 1/1)');
+  const tall = useMedia('(min-width: 600px) and (min-height: 900px)') && !wide;
+  const paged = !wide && !tall; // the phone turns pages; larger sheets show both at once
   const queue = getQueue();
   const qi = queue.indexOf(id);
   const inReview = qi >= 0;
@@ -246,7 +248,7 @@ function Plate({ id }: { id: string }) {
   const Exercise = EXERCISES[id];
 
   const nextId = inReview ? queue[qi + 1] : PLATES[i + 1]?.id;
-  const next = () => (nextId ? go(`/p/${nextId}`) : go(inReview ? '/' : '/canon'));
+  const next = () => (nextId ? go(`${nextId}`) : go(inReview ? '' : 'record'));
   const again = () => {
     setDone(null);
     setRun(run + 1);
@@ -285,9 +287,9 @@ function Plate({ id }: { id: string }) {
     <div className="bar b">
       <button
         className="link b"
-        onClick={() => (practising && !wide && !inReview ? setPractising(false) : go('/'))}
+        onClick={() => (practising && paged && !inReview ? setPractising(false) : go(''))}
       >
-        {practising && !wide && !inReview ? '← Principle' : '← Contents'}
+        {practising && paged && !inReview ? '← Principle' : '← Contents'}
       </button>
       <span className="bar-mid">
         {inReview ? `Review ${qi + 1} / ${queue.length}` : `${num(i)} / ${PLATES.length}`}
@@ -314,7 +316,7 @@ function Plate({ id }: { id: string }) {
             Best {scores[id].best} · attempts {scores[id].n}
           </p>
         )}
-        {!wide && (
+        {paged && (
           <button className="btn b primary read-go" onClick={() => setPractising(true)}>
             Practice
           </button>
@@ -341,9 +343,9 @@ function Plate({ id }: { id: string }) {
   );
 
   return (
-    <div className={`plate ${wide ? 'wide' : 'narrow'}`}>
+    <div className={`plate ${wide ? 'wide' : tall ? 'tall' : 'narrow'}`}>
       {bar}
-      {wide ? (
+      {!paged ? (
         <div className="spread">
           <div className="left">{read}</div>
           <div className="right">
@@ -402,7 +404,7 @@ function Canon() {
   return (
     <div className="plate canon-page">
       <div className="bar b">
-        <button className="link b" onClick={() => go('/')}>
+        <button className="link b" onClick={() => go('')}>
           ← Contents
         </button>
         <span className="bar-mid">Your Canon</span>
@@ -432,7 +434,7 @@ function Canon() {
               {PLATES.map((p, i) => {
                 const s = scores[p.id]?.best ?? 0;
                 return (
-                  <button key={p.id} className="cell" onClick={() => go(`/p/${p.id}`)}>
+                  <button key={p.id} className="cell" onClick={() => go(`${p.id}`)}>
                     <span className="cell-sq">
                       <motion.span
                         className={s >= MASTERY ? 'fill full' : 'fill'}

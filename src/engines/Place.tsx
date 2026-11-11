@@ -48,8 +48,8 @@ export function Place({
 
   const hasTray = pieces.some((p) => !p.start);
   const gap = 12;
-  const trayRows = pieces.length > 5 ? 2 : 1;
-  const trayH = hasTray ? Math.min(size.h * 0.26, trayRows * 52 + (trayRows - 1) * 8) : 0;
+  const trayRows = pieces.length > 5 || (pieces.length > 3 && size.w < 460) ? 2 : 1;
+  const trayH = hasTray ? Math.min(size.h * 0.26, trayRows * 40 + (trayRows - 1) * 8) : 0;
   const availH = size.h - (hasTray ? trayH + gap : 0);
   const bw = Math.max(0, Math.min(size.w, availH * ratio));
   const bh = bw / ratio;
