@@ -1,0 +1,36 @@
+import type { ComponentType } from 'react';
+import * as a from './part1';
+import * as b from './part2';
+
+export const EXERCISES: Record<string, ComponentType> = {
+  semantics: a.Semantics,
+  syntactics: a.Syntactics,
+  pragmatics: a.Pragmatics,
+  discipline: a.Discipline,
+  appropriateness: a.Appropriateness,
+  ambiguity: a.Ambiguity,
+  'design-is-one': a.DesignIsOne,
+  'visual-power': a.VisualPower,
+  'intellectual-elegance': a.IntellectualElegance,
+  timelessness: a.Timelessness,
+  responsibility: a.Responsibility,
+  equity: a.Equity,
+  'paper-sizes': b.PaperSizes,
+  grids: b.Grids,
+  letterhead: b.Letterhead,
+  'grids-for-books': b.GridsForBooks,
+  typefaces: b.Typefaces,
+  alignment: b.Alignment,
+  'type-size': b.TypeSize,
+  rulers: b.Rulers,
+  contrast: b.Contrast,
+  scale: b.Scale,
+  texture: b.Texture,
+  color: b.Color,
+  layouts: b.Layouts,
+  sequence: b.Sequence,
+  binding: b.Binding,
+  identity: b.Identity,
+  'white-space': b.WhiteSpace,
+  experiences: b.Experiences,
+};
